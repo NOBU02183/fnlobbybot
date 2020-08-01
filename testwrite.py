@@ -27,7 +27,7 @@ del d, r
 with open('test/image.json', 'r') as f:
     d=f.read()
 
-r=aes.encrypt(d, '_lobbybot_gomashio1596_pdf114514')
+r=aes.encrypt(d, aeskey)
 
 with open('.data/image', 'wb') as f:
     f.write(r)

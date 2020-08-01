@@ -1,0 +1,59 @@
+<head>
+    <title>Fortnite LobbyBot</title>
+    <meta name="description" content="@gomashio1596">
+    <link id="favicon" rel="icon"     href="https://raw.githubusercontent.com/gomashio1596/Fortnite-LobbyBot/master/templates/images/icon.png" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css?file=style1.css">
+    <script>
+        window.onload = function() {
+            var el1=document.getElementById('messageform')
+            if (el1) el1.action=location.href.replace('view', 'post')
+        
+            var el2=document.getElementById('deleteform')
+            if (el2) el2.action=location.href.replace('view', 'delete')
+       
+        };
+    </script>
+</head>
+<body class="font1">
+    <h1>スレッド {{thread['name']}}</h1>
+    <p>質問者: {{users.get(thread['creatoruuid'], {'name':thread['creatoruuid']})['name']}} <font color="#808080">- {{thread.get('time', 'null')}}</font></p>
+    {% for c, i in enumerate(thread['messages']) %}
+    {% if c == 0 %}
+        <p>内容 : <!--{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}--></p>
+        <div class="div-pre">{{i['content']}}</div><br>
+        {% if i.get('image', False) %}
+        {% for img in i['image'] %}
+        <img src="/image_{{images[img['id']]['name']}}?id={{img['id']}}"><br>
+        {% endfor %}
+        {% endif %}
+    {% else %}
+        <p>{{c}} : {{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}} <font color="#808080">- {{i.get('time', 'null')}}</font></p>
+        <div class="div-pre">{{i['content']}}</div><br>
+        {% if i.get('image', False) %}
+        {% for img in i['image'] %}
+        <img src="/image_{{images[img['id']]['name']}}?id={{img['id']}}"><br>
+        {% endfor %}
+        {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% if logged %}
+    <p>新規メッセージ</p>
+    <form action="/thread/post" method="post" id="messageform" enctype="multipart/form-data">
+        <textarea name="content" rows="5" placeholder="メッセージ" style="width: 80vmin;" onkeypress="if (event.keyCode==13) {if(event.shiftKey==true) {form.submit()}}"></textarea>
+        <p>画像を添付</p>
+        <input type="file" name="image" multiple accept="image/*"><br>
+        <button type="submit">送信</button>
+    </form>
+    {% else %}
+    <p class="p2"><a href="/login">ログイン</a>または<a href="register">登録</a>してメッセージを送信</p>
+    {% endif %}
+    <a href="./">戻る</a><br>
+    {% if admin %}
+    <form action="/thread/delete" method="post" id="deleteform" enctype="multipart/form-data">
+        <button type="submit">このスレッドを削除</button>
+    </form>
+    {% endif %}
+</body>

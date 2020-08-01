@@ -1,0 +1,30 @@
+<head>
+    <title>Fortnite LobbyBot</title>
+    <meta name="description" content="@gomashio1596">
+    <link id="favicon" rel="icon"     href="https://raw.githubusercontent.com/gomashio1596/Fortnite-LobbyBot/master/templates/images/icon.png" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css?file=style1.css">
+</head>
+<body class="font1">
+    <h1>スレッドを作る</h1>
+    {% if message %}
+    <p><font color="#ff0033">{{ message }}</font></p>
+    {% endif %}
+    <form action="/thread/create" method="post" enctype="multipart/form-data">
+        <div style="opacity:0.9; color: rgba( 255, 255, 255, 1);">
+            <p>タイトル</p>
+            <input type="text" id="title" name="title" placeholder="Title"/> <!--何しに来たんやお前-->
+            <p>内容</p>
+            <textarea type="text" id="content" name="content" placeholder="Content"></textarea>
+            <p>画像を添付</p>
+            <input type="file" name="image" multiple accept="image/*"><br>
+        </div>
+
+        <div class="button" style="opacity:0.9;">
+            <button type="submit">スレッドを作る</button>
+        </div>
+    </form>
+    <a href=".">戻る</a><br>
+</body>

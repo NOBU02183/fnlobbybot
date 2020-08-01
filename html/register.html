@@ -1,0 +1,32 @@
+<head>
+    <title>Fortnite LobbyBot</title>
+    <meta name="description" content="@gomashio1596">
+    <link id="favicon" rel="icon" href="https://raw.githubusercontent.com/gomashio1596/Fortnite-LobbyBot/master/templates/images/icon.png" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css?file=style1.css">
+</head>
+<body class="font1">
+    <h1>ユーザー登録</h1>
+    {% if message %}
+    <p><font color="#ff0033">{{ message }}</font></p>
+    {% endif %}
+    <form action="/register" method="post" enctype="multipart/form-data">
+        <div style="opacity:0.9; color: rgba( 255, 255, 255, 1);">
+            <p>ユーザー名</p>
+            <input type="text" id="name" name="name" placeholder="Name"/>
+            <p>ユーザーID</p>
+            <input type="text" id="userid" name="userid" placeholder="ID"/> <!--何しに来たんやお前-->
+            <p>パスワード</p>
+            <input type="password" id="password" name="password" placeholder="Password"/>
+            <p>パスワードの確認</p>
+            <input type="password" id="password_confirm" name="password_confirm" placeholder="Password Confirm"/>
+        </div>
+
+        <div class="button" style="opacity:0.9;">
+            <button type="submit">登録</button>
+        </div>
+    </form>
+    <a href="./">戻る</a><br>
+</body>

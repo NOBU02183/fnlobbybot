@@ -1,0 +1,51 @@
+<head>
+    <title>Fortnite LobbyBot</title>
+    <meta name="description" content="@gomashio1596">
+    <link id="favicon" rel="icon" href="https://raw.githubusercontent.com/gomashio1596/Fortnite-LobbyBot/master/templates/images/icon.png" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css?file=style1.css">
+</head>
+<body class="font1">
+    <h1>Fortnite LobbyBot</h1>
+    <!--<a href="https://fnlobbybot.pdfweb.tk">fnlobbybot.pdfweb.tk</a><br>-->
+    {% if logged %}
+    <p>{{users[userid]['name']}} / {{userid}} としてログイン中</p>
+    <a href="/logout">ログアウト</a><br>
+    {% else %}
+    <a href="/login">ログイン</a><br>
+    <a href="/register">ユーザー登録</a><br>
+    {% endif %}
+    <br>
+    <a href="/thread">サポートスレッド</a><br>
+    <a style="text-decoration: line-through;"><font color="#808080">提案スレッド</font></a><br>
+    <a style="text-decoration: line-through;"><font color="#808080">バグ報告スレッド</font></a><br>
+    <br>
+    <a href="https://discord.gg/NEnka5N" target="_blank" rel="noopener noreferrer">Discordサーバー</a><br>
+    <a href="https://github.com/gomashio1596/Fortnite-Lobbybot" target="_blank" rel="noopener noreferrer">gomashio1596/Fortnite-LobbyBot</a><a href="https://github.com/gomashio1596/Fortnite-Lobbybot" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><font color="#808080"> - Github</font></a><br>
+    <a href="https://twitter.com/gomashio1596" target="_blank" rel="noopener noreferrer">@gomashio1596</a><a href="https://twitter.com/gomashio1596" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><font color="#808080"> - Twitter</font></a><br>
+</body>
+
+<!--
+ _____________ 
+< Yo Fuck You >
+ ------------- 
+ \     ____________ 
+  \    |__________|
+      /           /\
+     /           /  \
+    /___________/___/|
+    |          |     |
+    |  ==\ /== |     |
+    |   O   O  | \ \ |
+    |     <    |  \ \|
+   /|          |   \ \
+  / |  \_____/ |   / /
+ / /|          |  / /|
+/||\|          | /||\/
+    -------------|   
+        | |    | | 
+       <__/    \__>
+
+-->

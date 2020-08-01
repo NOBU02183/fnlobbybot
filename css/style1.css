@@ -1,0 +1,23 @@
+body {
+    background-color: #333; 
+    color: #fff;
+}
+
+.font1 {
+  font-family: Consolas, 'Courier New', Courier, monospace;
+  font-size: 115%;
+}
+
+.tr {
+    position: absolute;
+    right: 0px; 
+    top: 0px;
+}
+
+a {
+  color: #005FFF;
+}
+
+.div-pre {
+    white-space: pre;
+}

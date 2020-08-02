@@ -2,7 +2,7 @@ from index import aes
 import json
 from os import getenv
 
-aeskey=os.getenv('aeskey')
+aeskey=getenv('aeskey')
 
 with open('test/thread.json', 'r') as f:
     d=f.read()

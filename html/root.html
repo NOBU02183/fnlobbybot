@@ -13,6 +13,7 @@
     {% if logged %}
     <p>{{users[userid]['name']}} / {{userid}} としてログイン中</p>
     <a href="/logout">ログアウト</a><br>
+    <a href="/userinfo">ユーザー情報を表示/変更</a><br>
     {% else %}
     <a href="/login">ログイン</a><br>
     <a href="/register">ユーザー登録</a><br>

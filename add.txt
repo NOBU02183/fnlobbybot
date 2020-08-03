@@ -1,3 +1,11 @@
 change user info
 admin /
 websocket realtime
+
+- userinfo 
+ログイン id
+x        x   : 403
+o        x   : 200 edit
+x        o   : 200 view
+o        o   : 200
+o        404 : 404

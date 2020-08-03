@@ -1,0 +1,33 @@
+<head>
+    <title>Fortnite LobbyBot</title>
+    <meta name="description" content="@gomashio1596">
+    <link id="favicon" rel="icon"     href="https://raw.githubusercontent.com/gomashio1596/Fortnite-LobbyBot/master/templates/im  ages/icon.png" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css?file=style1.css">
+</head>
+<body class="font1">
+    <h1>ユーザー情報</h1>
+    <p>{{userinfo['name']}} / {{userid}} </p>
+    {% if myself %}
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+    <form action="/userinfo" method="post" enctype="multipart/form-data">
+        <div style="opacity:0.9; color: rgba( 255, 255, 255, 1);">
+            <p>名前変更</p>
+            <input type="text" id="name" name="name" placeholder="New Name" autocomplete="off"/>
+            <p>ID変更</p>
+            <input type="text" id="id" name="id" placeholder="New ID" autocomplete="off"/>
+            <p>パスワード変更</p>
+            <input type="password" name="password" placeholder="New Password" autocomplete="off"/><br>
+        </div>
+
+        <div class="button" style="opacity:0.9;">
+            <button type="submit">変更</button>
+        </div>
+    </form>
+    {% endif %}
+    <a href="/">戻る</a><br>
+</body>

@@ -30,7 +30,7 @@
         {% endfor %}
         {% endif %}
     {% else %}
-        <p>{{c}} : {{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}} <font color="#808080">- {{i.get('time', 'null')}}</font></p>
+        <p>{{c}} : <a style="text-decoration: none;" href="/userinfo?id={{users.get(i['authoruuid'], {'userid':i['authoruuid']})['userid']}}">{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}</a> <font color="#808080">- {{i.get('time', 'null')}}</font></p>
         <div class="div-pre">{{i['content']}}</div><br>
         {% if i.get('image', False) %}
         {% for img in i['image'] %}

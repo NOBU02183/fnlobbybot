@@ -146,6 +146,25 @@ class user():
         #print('isadmin:', userid, r)
         #return r
 
+    def change(userid, changetype, content):
+        if (userdata:=user.getall().get(userid, False)):
+            useruuid=userdata.pop('useruuid')
+            if changetype == 'name':
+                userdata['name']=content
+            elif changetype == 'id':
+                userdata['userid']=content
+            elif changetype == 'password':
+                userdata['password']=content
+            r=user.getall_uuid()
+            r[useruuid]=userdata
+            #with open('test/r.txt', 'w') as f:
+            #    f.write(str(locals()))
+            data=json.dumps(r, indent='\t', ensure_ascii=False)
+            aes.writefile('.data/user', data)
+            return True
+        else:
+            return False
+
 class image():
 
     def getall():
@@ -523,6 +542,48 @@ async def sanic_thread_post_delete(req):
         else:
             return abort(403)
         
+@app.get('/userinfo')
+async def sanic_user_get_info(req):
+    if auth.islogged(req):
+        if (userid:=req.args.get('id', False)):
+            if (userdata:=user.getall().get(userid, False)):
+                return render_html('userinfo.html', myself=(userid == auth.getuserid(req)), userinfo=userdata, userid=userid)
+            else:
+                return abort(404)
+        else:
+            return render_html('userinfo.html', myself=True, userinfo=user.getuser(auth.getuserid(req)), userid=auth.getuserid(req)) #req user info
+    else:
+        if (userid:=req.args.get('id', False)):
+            if (userdata:=user.getall().get(userid, False)):
+                return render_html('userinfo.html', myself=False, userinfo=userdata, userid=userid)
+            else:
+                return abort(404)
+        else:
+            return abort(403)
+
+@app.post('/userinfo')
+async def sanic_user_post_info(req):
+    #print(req.form)
+    #return res.text('test')
+    if not auth.islogged(req):
+        return res.redirect('/login')
+    else:
+        if auth.getuserid(req) == req.args.get('id', False) or not 'id' in req.args.keys():
+            userid=auth.getuserid(req)
+            if (newname:=req.form.get('name', False)):
+                user.change(userid, 'name', newname)
+            if (newid:=req.form.get('id', False)):
+                if newid in user.getall().keys():
+                    return render_html('userinfo.html', myself=True, userinfo=user.getuser(userid), userid=userid, message='<font color="#ff0033">このIDは既に存在します</font>')
+                user.change(userid, 'id', newid)
+                expires[auth.getsessionid(req)]=newid
+                userid=newid
+            if (newpassword:=req.form.get('password', False)):
+                user.change(userid, 'password', newpassword)
+            return render_html('userinfo.html', myself=True, userinfo=user.getuser(userid), userid=userid, message='<font color="#00ff00">変更を保存しました</font>')
+        else:
+            return abort(403)
+    
         
 @app.route('/image_<name>')
 async def sanic_image(req, name):

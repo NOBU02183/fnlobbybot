@@ -22,7 +22,7 @@
     <p>質問者: {{users.get(thread['creatoruuid'], {'name':thread['creatoruuid']})['name']}} <font color="#808080">- {{thread.get('time', 'null')}}</font></p>
     {% for c, i in enumerate(thread['messages']) %}
     {% if c == 0 %}
-        <p>内容 : <!--{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}--></p>
+        <p id="{{c}}">内容 : <!--{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}--></p>
         <div class="div-pre">{{i['content']}}</div><br>
         {% if i.get('image', False) %}
         {% for img in i['image'] %}
@@ -30,7 +30,7 @@
         {% endfor %}
         {% endif %}
     {% else %}
-        <p>{{c}} : <a style="text-decoration: none;" href="/userinfo?id={{users.get(i['authoruuid'], {'userid':i['authoruuid']})['userid']}}"><font color="#fff">{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}</font></a> <font color="#808080">- {{i.get('time', 'null')}}</font></p>
+        <p id="message_{{c}}">{{c}} : <a style="text-decoration: none;" href="/userinfo?id={{users.get(i['authoruuid'], {'userid':i['authoruuid']})['userid']}}"><font color="#fff">{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}</font></a> <font color="#808080">- {{i.get('time', 'null')}}</font></p>
         <div class="div-pre">{{i['content']}}</div><br>
         {% if i.get('image', False) %}
         {% for img in i['image'] %}

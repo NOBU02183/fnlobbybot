@@ -14,10 +14,13 @@ from time import ctime as time
 import logging
 import sys
 from sanic.log import logger as saniclogger
+import re
 
 app=Sanic(__name__)
 expires={}
 admins=['0', '1']
+
+url_pattern = "https?://[\w/:%#\$&\?\(\)~\.=\+\-]+"
 
 jinja2env=Environment(loader=FileSystemLoader('./html', encoding='utf8'))
 
@@ -50,6 +53,14 @@ saniclogger.addHandler(dlh)
 def render_html(file_, **kwargs) -> str:
     template = jinja2env.get_template(file_)
     return res.html(template.render(**kwargs))
+    
+def replaceurl(s):
+    url_list = re.findall(url_pattern, s)
+    if not url_list:
+    	return s
+    for i in url_list:
+    	s=s.replace(i, f'<a href="{i}">{i}</a>', 1)
+    return s
 
 class thread():
     
@@ -69,7 +80,7 @@ class thread():
         t['messages'].append(
             {
                 'authoruuid':useruuid,
-                'content':content,
+                'content':replaceurl(content),
                 'time':time(),
                 'image':[{'id':i} for i in imagesr] if imagesr else None
             }
@@ -94,7 +105,7 @@ class thread():
 		    "messages": [
                 {
                     'authoruuid':useruuid,
-                    'content':content,
+                    'content':replaceurl(content),
                     'time':time(),
                     'image':[{'id':i} for i in imagesr] if imagesr else None
                 }
@@ -541,7 +552,29 @@ async def sanic_thread_post_delete(req):
                 return abort(400)
         else:
             return abort(403)
+            
+@app.websocket('/ws/thread')
+async def sanic_ws_thread(req, ws):
+	print('WS  Connected')
+	while True:
+		data = json.loads(await ws.recv())
+		print('WebSocket thread Received:', data, '\ntype:', type(data))
+		try:
+			rtype=data['type']
+			threadid=data['id']
+			if rtype == 'count':
+				await ws.send(json.dumps({**data, 'result':len(thread.getthread(threadid)['messages'])}))
+			elif rtype == 'message':
+				await ws.send(json.dumps({**data, 'result':thread.getthread(threadid)['messages']}))
+			else:
+				await ws.send(400)
+		except KeyError:
+			await ws.send(400)
         
+@app.route('/ws')
+async def sanic_ws_test(req):
+	return await res.file('html/wstest.html')
+	
 @app.get('/userinfo')
 async def sanic_user_get_info(req):
     if auth.islogged(req):

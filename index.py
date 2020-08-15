@@ -2,6 +2,7 @@
 from sanic import Sanic
 from sanic import response as res
 from sanic.exceptions import abort
+from sanic.websocket import ConnectionClosed
 from jinja2 import Environment, FileSystemLoader, Markup
 import os
 import json
@@ -31,8 +32,9 @@ class discordlogginghandler(logging.Handler):
         #fmt=logging.Formatter('%(asctime)s - (%(name)s)[%(levelname)s][%(host)s]: %(request)s %(message)s %(status)d %(byte)d')
         
     def emit(self, record):
-        print(record)
+        #print(record)
         c=self.format(record)
+        print(c)
         sendtodc(c, channel_id=738943877699993631)
 
 #dlh=discordlogginghandler()
@@ -68,8 +70,8 @@ class thread():
         t=json.loads(aes.readfile('.data/thread'))
         return t
 
-    def getthread(userid):
-        return thread.getall()[userid]
+    def getthread(threadid):
+        return thread.getall()[threadid]
 
     def post(threadid, useruuid, content, images=None):
         if images:
@@ -567,9 +569,10 @@ async def sanic_ws_thread(req, ws):
 			elif rtype == 'message':
 				await ws.send(json.dumps({**data, 'result':thread.getthread(threadid)['messages']}))
 			else:
-				await ws.send(400)
+				await ws.send('404')
 		except KeyError:
-			await ws.send(400)
+			await ws.send('400')
+			print(__import__('traceback').format_exc())
         
 @app.route('/ws')
 async def sanic_ws_test(req):
@@ -627,6 +630,12 @@ async def sanic_image(req, name):
             await resp.write(await response.read())
 
     return res.stream(streaming_fn, content_type='image/*')
+
+@app.route('/update')
+async def sanic_update(req):
+	with open('update.json', 'r') as f:
+		ul=json.load(f)
+	return render_html('update.html', ul=ul)
 
 @app.route('/cat')
 async def sanic_cat(req):

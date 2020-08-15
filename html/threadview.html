@@ -20,9 +20,11 @@
 <body class="font1">
     <h1>スレッド {{thread['name']}}</h1>
     <p>質問者: {{users.get(thread['creatoruuid'], {'name':thread['creatoruuid']})['name']}} <font color="#808080">- {{thread.get('time', 'null')}}</font></p>
-    {% for c, i in enumerate(thread['messages']) %}
+    <div id="messages">
+	{% for c, i in enumerate(thread['messages']) %}
+	<div id="msg_{{c}}">
     {% if c == 0 %}
-        <p id="{{c}}">内容 : <!--{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}--></p>
+        <p id="message_{{c}}">内容 : <!--{{users.get(i['authoruuid'], {'name':i['authoruuid']})['name']}}--></p>
         <div class="div-pre">{{i['content']}}</div><br>
         {% if i.get('image', False) %}
         {% for img in i['image'] %}
@@ -38,7 +40,9 @@
         {% endfor %}
         {% endif %}
     {% endif %}
+	</div>
     {% endfor %}
+    </div>
     {% if logged %}
     <p>新規メッセージ</p>
     <form action="/thread/post" method="post" id="messageform" enctype="multipart/form-data">

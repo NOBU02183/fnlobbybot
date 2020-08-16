@@ -6,16 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css?file=style1.css">
-    <script>
-        window.onload = function() {
-            var el1=document.getElementById('messageform')
-            if (el1) el1.action=location.href.replace('view', 'post')
-        
-            var el2=document.getElementById('deleteform')
-            if (el2) el2.action=location.href.replace('view', 'delete')
-       
-        };
-    </script>
+    <script src="/js?file=threadview.js"></script>
 </head>
 <body class="font1">
     <h1>スレッド {{thread['name']}}</h1>

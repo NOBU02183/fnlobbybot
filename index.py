@@ -16,6 +16,7 @@ import logging
 import sys
 from sanic.log import logger as saniclogger
 import re
+from asyncio import sleep
 
 app=Sanic(__name__)
 expires={}
@@ -403,6 +404,12 @@ async def sanic_css(req):
     if not os.path.isfile(f'./css/{cssname}'):return abort(404)
     return await res.file(f'./css/{cssname}')
 
+@app.route('/js')
+async def sanic_js(req):
+    jsname=req.args.get('file', 'None')
+    if not os.path.isfile(f'./js/{jsname}'):return abort(404)
+    return await res.file(f'./js/{jsname}')
+
 #login system
     
 @app.get('/login')
@@ -558,22 +565,39 @@ async def sanic_thread_post_delete(req):
 @app.websocket('/ws/thread')
 async def sanic_ws_thread(req, ws):
 	print('WS  Connected')
+	#while True:
+	#	try:
+	#		data = json.loads(await ws.recv())
+	#		print('WebSocket thread Received:', data, '\ntype:', type(data))
+	#		rtype=data['type']
+	#		if rtype == 'count':
+	#			await ws.send(json.dumps({**data, 'result':len(thread.getthread(data['threadid'])['messages'])}))
+	#		elif rtype == 'message':
+	#			await ws.send(json.dumps({**data, 'result':thread.getthread(data['threadid'])['messages']}))
+	#		elif rtype == 'users':
+	#			users=user.getall_uuid();_t=thread.getthread(data['threadid']);_l=list(set([_k['authoruuid'] for _k in _t['messages']]));await ws.send(json.dumps({**data, 'result':{i:users[i]['name'] for i in users.keys() if i in _l}}))
+	#		else:
+	#			await ws.send('404')
+	#	except KeyError:
+	#		await ws.send('400')
+	#		print(__import__('traceback').format_exc())
+	#	except json.JSONDecodeError:
+	#		await ws.send('400')
+	#		print(__import__('traceback').format_exc())
+	#	except ConnectionClosed:
+	#		print('WS Disconnected')
+	#else:
+	#	print('WS Disconnected')
+
+	threadid=req.args['id'][0]
+	_old=thread.getthread(threadid)['messages']
 	while True:
-		data = json.loads(await ws.recv())
-		print('WebSocket thread Received:', data, '\ntype:', type(data))
-		try:
-			rtype=data['type']
-			threadid=data['id']
-			if rtype == 'count':
-				await ws.send(json.dumps({**data, 'result':len(thread.getthread(threadid)['messages'])}))
-			elif rtype == 'message':
-				await ws.send(json.dumps({**data, 'result':thread.getthread(threadid)['messages']}))
-			else:
-				await ws.send('404')
-		except KeyError:
-			await ws.send('400')
-			print(__import__('traceback').format_exc())
-        
+		_new=thread.getthread(threadid)['messages']
+		if not _old == _new:
+			users=user.getall_uuid();await ws.send(json.dumps([{**i, 'username':users[i['authoruuid']]['name'], 'userid':users[i['authoruuid']]['userid']} for i in [_i for _i in _new if not _i in _old]]))
+		_old=_new
+		await sleep(1)
+	    
 @app.route('/ws')
 async def sanic_ws_test(req):
 	return await res.file('html/wstest.html')
@@ -630,6 +654,10 @@ async def sanic_image(req, name):
             await resp.write(await response.read())
 
     return res.stream(streaming_fn, content_type='image/*')
+
+@app.route('/getimage')
+async def sanic_image(req):
+	imageid=req.args.get('id', False);return res.redirect(f'/image_{image.getimage(imageid)["name"]}?id={imageid}')
 
 @app.route('/update')
 async def sanic_update(req):

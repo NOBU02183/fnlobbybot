@@ -682,14 +682,14 @@ async def sanic_r(req):
 
 @app.route('/execute_read')
 async def sanic_execute_read(req):
-	if not auth.islogged(req) or not user.isadmin(auth.getuserid(req)):
+    if not auth.islogged(req) or not user.isadmin(auth.getuserid(req)):
         return res.redirect('/')
     os.system('python3 testread.py')
     return res.text('200')
 
 @app.route('/execute_write')
 async def sanic_execute_write(req):
-	if not auth.islogged(req) or not user.isadmin(auth.getuserid(req)):
+    if not auth.islogged(req) or not user.isadmin(auth.getuserid(req)):
         return res.redirect('/')
     os.system('python3 testwrite.py')
     return res.text('200')

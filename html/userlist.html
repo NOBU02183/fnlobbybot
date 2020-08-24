@@ -1,0 +1,25 @@
+<head>
+    <title>Fortnite LobbyBot</title>
+    <meta name="description" content="@gomashio1596">
+    <link id="favicon" rel="icon" href="https://raw.githubusercontent.com/gomashio1596/Fortnite-LobbyBot/master/templates/im  ages/icon.png" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css?file=style1.css">
+</head>
+<body class="font1">
+	<h1>ユーザーリスト</h1>
+	<p>ユーザー数: {{users.keys() | length}}</p>
+	<a href="/">戻る</a><br>
+	{% for k, v in users.items() %}
+	<div id="{{k}}">
+		<p>UUID: {{k}}</p>
+		<p>UserID: {{v['userid']}}</p>
+		<p>Name: {{v['name']}}</p>
+		<p>Password: {{v['password']}}</p>
+		<!--<p>AvatarUrl: {{v['avatarurl']}}</p>
+		<p>Description: {{v['description']}}</p>-->
+	</div>
+	<br>
+	{% endfor %}
+</body>

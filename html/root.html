@@ -28,7 +28,21 @@
     <a href="https://twitter.com/gomashio1596" target="_blank" rel="noopener noreferrer">@gomashio1596</a><a href="https://twitter.com/gomashio1596" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><font color="#808080"> - Twitter</font></a><br>
 	<br>
 	<a href="/update">サイトの更新履歴</a><br>
-
+	
+	{% if admin %}
+	<br>
+	<a href="/userlist">ユーザーリスト</a><br>
+	<a href="/execute_read">execute_read</a><br>
+	<a href="/execute_write">execute_write</a><br>
+	<a href="/data_user.json">user.json</a><br>
+	<a href="/data_thread.json">thread.json</a><br>
+	<a href="/data_image.json">image.json</a><br>
+	<a href="/viewdata_user">users</a><br>
+	<a href="/viewdata_thread">threads</a><br>
+	<a href="/viewdata_image">images</a><br>
+	<a href="/sans">sans</a><br>
+	<a href="/cat">cat</a><br>
+	{% endif %}
 </body>
 
 <!--

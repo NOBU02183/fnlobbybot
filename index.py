@@ -399,7 +399,7 @@ async def root(req):
     #print('req.cookies:', req.cookies)
     #print('logged:', req.cookies.get('X-SessionId', False) in expires.keys())
     #return res.text(':>')
-    return render_html('root.html', logged=auth.islogged(req), userid=auth.getuserid(req), users=user.getall())
+    return render_html('root.html', logged=auth.islogged(req), userid=auth.getuserid(req), users=user.getall(), admin=user.isadmin(auth.getuserid(req)))
     
 @app.route('/css')
 async def sanic_css(req):
@@ -667,6 +667,39 @@ async def sanic_update(req):
 	with open('update.json', 'r') as f:
 		ul=json.load(f)
 	return render_html('update.html', ul=ul)
+
+@app.route('/userlist')
+async def sanic_userlist(req):
+    if not auth.islogged(req) or not user.isadmin(auth.getuserid(req)):
+        return res.redirect('/')
+    users=user.getall_uuid()
+    return render_html('userlist.html', users=users)
+
+@app.route('/data_<t>.json')
+async def sanic_data(req, t):
+    if not auth.islogged(req) or not user.isadmin(auth.getuserid(req)):
+        return res.redirect('/')
+    if t == 'user':
+        return res.json(user.getall_uuid())
+    if t == 'thread':
+    	return res.json(thread.getall())
+    if t == 'image':
+    	return res.json(image.getall())
+    else:
+    	return res.json({'message':f'What is this type: {t}'}, status=404)
+
+@app.route('/viewdata_<t>')
+async def sanic_data(req, t):
+    if not auth.islogged(req) or not user.isadmin(auth.getuserid(req)):
+        return res.redirect('/')
+    if t == 'user':
+        return render_html('viewdata.html', data=json.dumps(user.getall_uuid(), indent='\t'))
+    if t == 'thread':
+    	return render_html('viewdata.html', data=json.dumps(thread.getall(), indent='\t'))
+    if t == 'image':
+    	return render_html('viewdata.html', data=json.dumps(image.getall(), indent='\t'))
+    else:
+    	return res.json({'message':f'What is this type: {t}'}, status=404)
 
 @app.route('/cat')
 async def sanic_cat(req):

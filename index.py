@@ -392,6 +392,14 @@ def sendtodc(message, channel_id=736391563319443567):
 @app.listener('before_server_start')
 def initapp(app, loop):
     app.aiohttp_session = aiohttp.ClientSession(loop=loop)
+    
+@app.middleware('request')
+async def force_ssl(req):
+    if req.headers.get('X-Forwarded-Proto') == 'http':
+        return res.redirect(
+            req.url.replace('http://', 'https://', 1),
+            status=301
+        )
 
 @app.route('/')
 async def root(req):
